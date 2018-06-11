@@ -4,51 +4,95 @@
 --
 -----------------------------------------------------------------------------------------
 --Texto do Jogo
+
 jogador = " "
+placarX=0
+placarO=0
+quantidadaJogadas = 0 
 
-local myText = display.newText( "Escolha o elemento de jogada: ", 165, 160, native.systemFont, 20 )
-myText:setFillColor(1,1,1)
 
-local myText = display.newText( "Jogo da Velha", 170, 40, native.systemFont, 32)
-myText:setFillColor(1,1,0)
+tabuleiroJogadas = {{" "," "," "},
+			       {" "," "," "},
+                   {" "," "," "}}
 
---Opções de Jogada
---O
-retanguloO = display.newRect(237,230,130,50)
-function retanguloO:touch( event )
-    if event.phase == "ended" then
-        jogador="O"
-        limparButoes()
-        return true
+function inicioJogo()
+
+    limparRetangulo = display.newRect(100,230,410,280)
+    limparRetangulo.strokeWidth = 0 
+    limparRetangulo:setFillColor( 0 )
+    limparRetangulo:setStrokeColor(0 , 0 ,0 )
+
+    limparPontuacao = display.newRect(20,430,600,80)
+    limparPontuacao.strokeWidth = 4
+    limparPontuacao:setFillColor( 0 )
+    limparPontuacao:setStrokeColor( 0, 0, 0 )
+
+    jogador = " "
+    placar1=0
+    placar2=0
+    quantidadaJogadas = 0 
+    
+    
+    tabuleiroJogadas = {{" "," "," "},
+                       {" "," "," "},
+                       {" "," "," "}}
+    
+    
+    local myText = display.newText( "Escolha o elemento de jogada: ", 165, 160, native.systemFont, 20 )
+    myText:setFillColor(1,1,1)
+
+    local myText = display.newText( "Jogo da Velha", 170, 40, native.systemFont, 32)
+    myText:setFillColor(1,0,0)
+
+    --Opções de Jogada
+    --O
+    retanguloO = display.newRect(237,230,130,50)
+    retanguloO.strokeWidth = 4
+    retanguloO:setFillColor( 1,1,1 )
+    retanguloO:setStrokeColor( 1, 0, 0 )
+    function retanguloO:touch( event )
+        if event.phase == "ended" then
+            jogador="O"
+            limparButoes()
+            return true
+        end
     end
-end
-retanguloO:addEventListener( "touch",retanguloO)
+    retanguloO:addEventListener( "touch",retanguloO)
+   
+
+    local myCircle = display.newCircle( 237,230, 15, 15 )
+    myCircle:setFillColor( 1 )
+    myCircle.strokeWidth = 4
+    myCircle:setStrokeColor( 1, 0 ,0 )
 
 
-local myCircle = display.newCircle( 237,230, 15, 15 )
-myCircle:setFillColor( 1 )
-myCircle.strokeWidth = 4
-myCircle:setStrokeColor( 0, 0 ,0 )
+    --X
+    retanguloX = display.newRect(100,230,130,50)
+    retanguloX.strokeWidth = 4
+    retanguloX:setFillColor( 1,1,1 )
+    retanguloX:setStrokeColor( 1, 0, 0 )
 
-
---X
-retanguloX = display.newRect(100,230,130,50)
-function retanguloX:touch( event )
-    if event.phase == "ended" then
-        jogador="X"
-        limparButoes()
-        return true
+    function retanguloX:touch( event )
+        if event.phase == "ended" then
+            jogador="X"
+            limparButoes()
+            return true
+        end
     end
-end
-retanguloX:addEventListener( "touch",retanguloX)
+    retanguloX:addEventListener( "touch",retanguloX)
 
-local Vertical1 = display.newLine( 110, 250, 90, 210)
-Vertical1.strokeWidth = 4
-Vertical1:setStrokeColor(1 , 0 ,0 )  
+    local Vertical1 = display.newLine( 110, 250, 90, 210)
+    Vertical1.strokeWidth = 4
+    Vertical1:setStrokeColor(1 , 0 ,0 )  
 
-local Vertical2 = display.newLine(  90, 250, 110, 210)
-Vertical2.strokeWidth = 4   
-Vertical2:setStrokeColor(1 , 0 ,0 ) 
+    local Vertical2 = display.newLine(  90, 250, 110, 210)
+    Vertical2.strokeWidth = 4   
+    Vertical2:setStrokeColor(1 , 0 ,0 ) 
+
+end 
+
+
+inicioJogo()
 
 --Limpar Butões--
 function limparButoes()
@@ -57,6 +101,7 @@ function limparButoes()
     limparRetangulo:setFillColor( 0 )
     limparRetangulo:setStrokeColor(0 , 0 ,0 )
     tabuleiro()
+    
 
 end
 
@@ -80,11 +125,56 @@ function tabuleiro()
     linhaHorizontal2.strokeWidth = 3.5
     Quadrados()
 
+    placar()
 end
 
-tabuleiroJogadas = {{" "," "," "},
-			       {" "," "," "},
-                   {" "," "," "}}
+
+
+
+function placar()
+    retanguloO = display.newRect(237,430,120,38)
+    retanguloO.strokeWidth = 4
+    retanguloO:setFillColor( 1,1,1 )
+    retanguloO:setStrokeColor( 1, 0, 0 )
+    
+    retanguloX = display.newRect(100,430,120,38)
+    retanguloX.strokeWidth = 4
+    retanguloX:setFillColor( 1,1,1 )
+    retanguloX:setStrokeColor( 1, 0, 0 )
+    
+    
+    jogadorX1="X"    
+    vitoriaX= jogadorX1.."               "..placarX
+    
+    local options = 
+    {
+        text = vitoriaX,     
+        x = 220,
+        y = 433,
+        width = 128,
+        font = native.systemFont,   
+        fontSize = 18,
+        align = "right"
+    }
+    local myText = display.newText(options )
+    myText:setFillColor( 1, 0, 0 )
+           
+    jogadorO1 = "O"
+    vitoriaO= jogadorO1.."               "..placarO
+    
+    local options2 = 
+    {
+        text = vitoriaO,     
+        x = 83,
+        y = 433,
+        width = 128,
+        font = native.systemFont,   
+        fontSize = 18,
+        align = "right"
+    }
+    local myText = display.newText( options2 )
+    myText:setFillColor( 1, 0, 0 )
+end
 
 function mudarJogador() 
     if(jogador=="X") then
@@ -92,33 +182,39 @@ function mudarJogador()
     else
         jogador="X"
     end
-end
+end  
 
 function verificarVitoria()
-    if(tabuleiroJogadas[1][1] ~= " " and tabuleiroJogadas[1][1] == tabuleiroJogadas[1][2] 
-        and tabuleiroJogadas[1][2] == tabuleiroJogadas[1][3])then
-        return true
-    elseif(tabuleiroJogadas[2][1] ~= " " and tabuleiroJogadas[2][1] == tabuleiroJogadas[2][2] 
-            and tabuleiroJogadas[2][2] == tabuleiroJogadas[2][3]) then
-        return true
-    elseif (tabuleiroJogadas[3][1] ~= " " and tabuleiroJogadas[3][1] == tabuleiroJogadas[3][2] 
-            and tabuleiroJogadas[3][2] == tabuleiroJogadas[3][3]) then
-        return true
-    elseif(tabuleiroJogadas[1][1] ~= " " and tabuleiroJogadas[1][1] == tabuleiroJogadas[2][1] 
-            and tabuleiroJogadas[2][1] == tabuleiroJogadas[3][1]) then
-        return true
-    elseif(tabuleiroJogadas[1][2] ~=" " and tabuleiroJogadas[1][2] == tabuleiroJogadas[2][2] 
-            and tabuleiroJogadas[2][2] == tabuleiroJogadas[3][2]) then
-        return true
-    elseif(tabuleiroJogadas[1][3] ~= " " and tabuleiroJogadas[1][3] == tabuleiroJogadas[2][3] 
-            and tabuleiroJogadas[2][3] == tabuleiroJogadas[3][3]) then
-        return true
-    elseif(tabuleiroJogadas[1][1] ~= " " and tabuleiroJogadas[1][1] == tabuleiroJogadas[2][2]
-            and tabuleiroJogadas[2][2] == tabuleiroJogadas[3][3]) then
-        return true
-    elseif(tabuleiroJogadas[3][1] ~= " " and tabuleiroJogadas[3][1] == tabuleiroJogadas[2][2] 
-            and tabuleiroJogadas[2][2] == tabuleiroJogadas[1][3]) then
-		return true		
+
+    if(quantidadaJogadas<=8) then
+
+        if(tabuleiroJogadas[1][1] ~= " " and tabuleiroJogadas[1][1] == tabuleiroJogadas[1][2] 
+            and tabuleiroJogadas[1][2] == tabuleiroJogadas[1][3])then
+            vencedor()
+        elseif(tabuleiroJogadas[2][1] ~= " " and tabuleiroJogadas[2][1] == tabuleiroJogadas[2][2] 
+                and tabuleiroJogadas[2][2] == tabuleiroJogadas[2][3]) then
+            vencedor()
+        elseif (tabuleiroJogadas[3][1] ~= " " and tabuleiroJogadas[3][1] == tabuleiroJogadas[3][2] 
+                and tabuleiroJogadas[3][2] == tabuleiroJogadas[3][3]) then
+            vencedor()
+        elseif(tabuleiroJogadas[1][1] ~= " " and tabuleiroJogadas[1][1] == tabuleiroJogadas[2][1] 
+                and tabuleiroJogadas[2][1] == tabuleiroJogadas[3][1]) then
+            vencedor()
+        elseif(tabuleiroJogadas[1][2] ~=" " and tabuleiroJogadas[1][2] == tabuleiroJogadas[2][2] 
+                and tabuleiroJogadas[2][2] == tabuleiroJogadas[3][2]) then
+            vencedor()
+        elseif(tabuleiroJogadas[1][3] ~= " " and tabuleiroJogadas[1][3] == tabuleiroJogadas[2][3] 
+                and tabuleiroJogadas[2][3] == tabuleiroJogadas[3][3]) then
+            vencedor()
+        elseif(tabuleiroJogadas[1][1] ~= " " and tabuleiroJogadas[1][1] == tabuleiroJogadas[2][2]
+                and tabuleiroJogadas[2][2] == tabuleiroJogadas[3][3]) then
+            vencedor()
+        elseif(tabuleiroJogadas[3][1] ~= " " and tabuleiroJogadas[3][1] == tabuleiroJogadas[2][2] 
+                and tabuleiroJogadas[2][2] == tabuleiroJogadas[1][3]) then
+            vencedor()
+        end
+    else
+        empate()
 	end
 end
 
@@ -131,14 +227,9 @@ function limparTabuleiro()
     limparRetangulo2.strokeWidth = 0 
     limparRetangulo2:setFillColor( 0 )
     limparRetangulo2:setStrokeColor(0 , 0 ,0 )
-
+    quantidadaJogadas = 0 
     tabuleiro()
 end
-
-
-placar1=0
-placar2=0
-
 
 function novoJogo()
 
@@ -150,92 +241,68 @@ function novoJogo()
     local myText = display.newText( "Deseja jogar novamente: ", 165, 160, native.systemFont, 20 )
     myText:setFillColor(1,1,1)
     
-    retanguloO = display.newRect(237,230,130,50)
+    retanguloSim = display.newRect(100,230,130,50)
     
-    function retanguloO:touch( event )
+    function retanguloSim:touch( event )
         if event.phase == "ended" then
-            
-        
+            mudarJogador()
+            limparTabuleiro()
             return true
         end
     end
     
-    retanguloO:addEventListener( "touch",retanguloO)
-
-    
+    retanguloSim:addEventListener( "touch",retanguloSim)
    
-    retanguloX = display.newRect(100,230,130,50)
-    function retanguloX:touch( event )
+    retanguloNao = display.newRect(237,230,130,50)
+    function retanguloNao:touch( event )
         if event.phase == "ended" then
-           
+            placarO=0
+            placarX=0
+            inicioJogo()
             return true
         end
     end
-retanguloX:addEventListener( "touch",retanguloX)
+    retanguloNao:addEventListener( "touch",retanguloNao)
 
-    local myText = display.newText( "SIM", 100, 234, native.systemFont, 18)
-        myText:setFillColor(1,0,0)
+    local textSim = display.newText( "SIM", 100, 234, native.systemFont, 18)
+        textSim:setFillColor(1,0,0)
 
-    local myText = display.newText( "NÃO", 240, 234, native.systemFont, 18)
-    myText:setFillColor(1,0,0)
+    local textNao = display.newText( "NÃO", 240, 234, native.systemFont, 18)
+    textNao:setFillColor(1,0,0)
     
 end
 
-function placar()
-    if(jogador=="X") then    
-        placar1 = placar1 + 1
-        venc= jogador.." "..placar1
+function vencedor()
+    if(jogador == "X") then
+        placarX = placarX +1
+        placar()
+       
+    else 
+        placarO = placarO +1
+        placar()
+    end
+        novoJogo()
+        venc = "Vencedor "..jogador
+        
         local options = 
         {
             text = venc,     
-            x = 120,
-            y = 390,
+            x = 170,
+            y = 100,
             width = 128,
             font = native.systemFont,   
-            fontSize = 18,
+            fontSize = 20,
             align = "right"
         }
-        mudarJogador()
-
-        
-       
-        venc= jogador.." "..placar2
-        local options2 = 
-        {
-            text = venc,     
-            x = 120,
-            y = 450,
-            width = 128,
-            font = native.systemFont,   
-            fontSize = 18,
-            align = "right"
-        }
-        local myText = display.newText( options2 )
-        myText:setFillColor( 1, 0, 0 )
-
         local myText = display.newText( options )
         myText:setFillColor( 1, 0, 0 )
-    else
-        placar2 = placar2 + 1
-     end
-
-end
-
-
-function vencedor()
-   
-    if(verificarVitoria() == true)then
-        
-    end
-        
 end
 
 function empate()
-    if(verificarVitoria() == false)then
-        
-    end
-
-end
+    novoJogo()
+    local myText = display.newText( "Jogo Empatado!!", 170, 100, native.systemFont, 20 )
+    myText:setFillColor(1,0,0)
+end  
 
 function Jogada1(jogador) 
     if(tabuleiroJogadas[1][1]==" ")then
@@ -244,24 +311,28 @@ function Jogada1(jogador)
             myCircle:setFillColor( 1 )
             myCircle.strokeWidth = 4
             myCircle:setStrokeColor( 1, 1 , 1 )
+            
             tabuleiroJogadas[1][1] = jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
 
         else    
             local Vertical1 = display.newLine( 50, 110, 115, 175)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )  
+
             local Vertical1 = display.newLine( 115, 110, 50, 175)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 ) 
+
             tabuleiroJogadas[1][1] = jogador
-            vencedor()
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
 
         end 
-    end
-
-    
+    end    
 end   
 
 function Jogada2(jogador) 
@@ -272,16 +343,23 @@ function Jogada2(jogador)
             myCircle:setFillColor( 1 )
             myCircle.strokeWidth = 4
             myCircle:setStrokeColor( 1, 1 , 1 )
+            
             tabuleiroJogadas[1][2]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         else 
             local Vertical1 = display.newLine( 198,180, 120, 110)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
+
             local Vertical1 = display.newLine(120 ,180, 198, 110)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 ) 
+
             tabuleiroJogadas[1][2]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
             
 
@@ -296,17 +374,24 @@ function jogada3(jogador)
             myCircle:setFillColor( 1 )
             myCircle.strokeWidth = 4
             myCircle:setStrokeColor( 1, 1 , 1 )
+
             tabuleiroJogadas[1][3]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
             
         else  
             local Vertical1 = display.newLine( 200,180, 275, 110)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
+
             local Vertical1 = display.newLine( 275,180, 200, 110)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
+
             tabuleiroJogadas[1][3]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
 
         end    
@@ -320,16 +405,23 @@ function jogada4(jogador)
             myCircle:setFillColor( 1 )
             myCircle.strokeWidth = 4
             myCircle:setStrokeColor( 1, 1 , 1 )
+
             tabuleiroJogadas[2][1]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         else  
             local Vertical1 = display.newLine( 50, 250, 115, 185)
             Vertical1.strokeWidth = 4
-            Vertical1:setStrokeColor(1 , 1 ,1 )  
+            Vertical1:setStrokeColor(1 , 1 ,1 )
+
             local Vertical1 = display.newLine( 115, 250, 50, 185)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
+
             tabuleiroJogadas[2][1]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         end    
     end
@@ -343,16 +435,23 @@ function jogada5(jogador)
             myCircle:setFillColor( 1 )
             myCircle.strokeWidth = 4
             myCircle:setStrokeColor( 1, 1 , 1 )
+
             tabuleiroJogadas[2][2]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         else 
             local Vertical1 = display.newLine( 125,180, 200, 255)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
+
             local Vertical1 = display.newLine( 200,180, 125, 255)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
+
             tabuleiroJogadas[2][2]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         end    
     end
@@ -365,16 +464,23 @@ function jogada6(jogador)
             myCircle:setFillColor( 1 )
             myCircle.strokeWidth = 4
             myCircle:setStrokeColor( 1, 1 , 1 )
+
             tabuleiroJogadas[2][3]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         else 
             local Vertical1 = display.newLine( 200, 180, 280, 260)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
+
             local Vertical1 = display.newLine( 280, 180, 200, 260)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
+
             tabuleiroJogadas[2][3]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         end    
     end
@@ -387,7 +493,10 @@ function jogada7(jogador)
             myCircle:setFillColor( 1 )
             myCircle.strokeWidth = 4
             myCircle:setStrokeColor( 1, 1 , 1 )
+
             tabuleiroJogadas[3][1]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
             
         else
@@ -399,6 +508,8 @@ function jogada7(jogador)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
             tabuleiroJogadas[3][1]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
 
         end    
@@ -412,7 +523,10 @@ function jogada8(jogador)
             myCircle:setFillColor( 1 )
             myCircle.strokeWidth = 4
             myCircle:setStrokeColor( 1, 1 , 1 )
+
             tabuleiroJogadas[3][2]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         else   
             local Vertical1 = display.newLine( 128, 335, 200, 265)
@@ -422,7 +536,10 @@ function jogada8(jogador)
             local Vertical1 = display.newLine( 200, 335, 128, 265)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
+
             tabuleiroJogadas[3][2]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         end    
     end
@@ -435,16 +552,23 @@ function jogada9(jogador)
             myCircle:setFillColor( 1 )
             myCircle.strokeWidth = 4
             myCircle:setStrokeColor( 1, 1 , 1 )
+
             tabuleiroJogadas[3][3]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         else 
             local Vertical1 = display.newLine( 210, 335, 280, 265)
             Vertical1.strokeWidth = 4
-            Vertical1:setStrokeColor(1 , 1 ,1 )     
+            Vertical1:setStrokeColor(1 , 1 ,1 )
+
             local Vertical1 = display.newLine( 280, 335, 210, 265)
             Vertical1.strokeWidth = 4
             Vertical1:setStrokeColor(1 , 1 ,1 )
+
             tabuleiroJogadas[3][3]=jogador
+            quantidadaJogadas = quantidadaJogadas + 1
+            verificarVitoria()
             mudarJogador()
         end    
     end
@@ -496,8 +620,6 @@ function Quadrados()
     end
      
     quadrado3:addEventListener( "touch",quadrado3)
-
-
 
     local quadrado4 = display.newRect( 80,220, 70, 70 )
     quadrado4.strokeWidth = 3
@@ -587,10 +709,5 @@ function Quadrados()
     end
      
     quadrado9:addEventListener( "touch",quadrado9)
-
+ 
 end
-
-
-
-
-
